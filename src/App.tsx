@@ -44,6 +44,7 @@ export default function App() {
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [result, setResult] = useState<AuditResult | null>(null);
   const [isGeneratingReport, setIsGeneratingReport] = useState(false);
+  const [showDocs, setShowDocs] = useState(false);
 
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -132,23 +133,87 @@ export default function App() {
             <h1 className="text-xl font-bold tracking-tight">FairAudit AI</h1>
           </div>
           <nav className="hidden md:flex items-center gap-6 text-sm font-medium text-gray-500">
-            <a href="#" className="text-indigo-600">Dashboard</a>
-            <a href="#" className="hover:text-gray-900 transition-colors">Documentation</a>
-            <a href="#" className="hover:text-gray-900 transition-colors">Legal Frameworks</a>
+            <button 
+              onClick={() => setShowDocs(false)} 
+              className={cn("transition-colors", !showDocs ? "text-indigo-600" : "hover:text-gray-900")}
+            >
+              Dashboard
+            </button>
+            <button 
+              onClick={() => setShowDocs(true)} 
+              className={cn("transition-colors", showDocs ? "text-indigo-600" : "hover:text-gray-900")}
+            >
+              Documentation
+            </button>
           </nav>
           <div className="flex items-center gap-3">
-            <button className="text-sm font-medium px-4 py-2 rounded-full border border-gray-200 hover:bg-gray-50 transition-colors">
-              Sign In
-            </button>
-            <button className="text-sm font-medium px-4 py-2 rounded-full bg-indigo-600 text-white hover:bg-indigo-700 transition-colors shadow-sm">
-              Get Started
-            </button>
+            {/* Removed Sign In and Get Started */}
           </div>
         </div>
       </header>
 
       <main className="max-w-7xl mx-auto px-4 py-8">
-        {!data.length ? (
+        {showDocs ? (
+          <div className="max-w-4xl mx-auto animate-in fade-in slide-in-from-bottom-4 duration-500">
+            <div className="bg-white rounded-3xl border border-gray-200 p-10 shadow-sm">
+              <h2 className="text-4xl font-extrabold mb-8 tracking-tight">Documentation</h2>
+              
+              <section className="mb-10">
+                <h3 className="text-2xl font-bold mb-4 text-indigo-600">Overview</h3>
+                <p className="text-gray-600 leading-relaxed mb-4">
+                  FairAudit AI is a specialized tool designed to detect and analyze bias in machine learning datasets and model predictions. 
+                  It focuses on key fairness metrics used in legal and ethical AI audits.
+                </p>
+              </section>
+
+              <section className="mb-10">
+                <h3 className="text-2xl font-bold mb-4 text-indigo-600">Key Metrics Explained</h3>
+                <div className="space-y-6">
+                  <div className="bg-gray-50 p-6 rounded-2xl border border-gray-100">
+                    <h4 className="font-bold mb-2">Demographic Parity</h4>
+                    <p className="text-sm text-gray-600">
+                      Ensures that the probability of a positive outcome is the same for all groups. 
+                      Formula: P(Prediction=1 | Group=A) = P(Prediction=1 | Group=B).
+                    </p>
+                  </div>
+                  <div className="bg-gray-50 p-6 rounded-2xl border border-gray-100">
+                    <h4 className="font-bold mb-2">Disparate Impact (80% Rule)</h4>
+                    <p className="text-sm text-gray-600">
+                      A ratio comparing the selection rate of a group against the selection rate of the highest-performing group. 
+                      If the ratio is below 0.8 (80%), it may indicate adverse impact under US employment law.
+                    </p>
+                  </div>
+                  <div className="bg-gray-50 p-6 rounded-2xl border border-gray-100">
+                    <h4 className="font-bold mb-2">Equalized Odds</h4>
+                    <p className="text-sm text-gray-600">
+                      Requires that the model has the same True Positive Rate (TPR) across all groups. 
+                      This ensures that qualified individuals have an equal chance of being correctly identified regardless of their group.
+                    </p>
+                  </div>
+                </div>
+              </section>
+
+              <section className="mb-10">
+                <h3 className="text-2xl font-bold mb-4 text-indigo-600">How to Use</h3>
+                <ol className="list-decimal list-inside space-y-4 text-gray-600">
+                  <li><span className="font-bold text-gray-900">Upload Data:</span> Provide a CSV or JSON file containing your model's predictions and ground truth.</li>
+                  <li><span className="font-bold text-gray-900">Configure:</span> Select the protected attribute (e.g., Gender), the target variable (Actual), and the prediction variable (Model Output).</li>
+                  <li><span className="font-bold text-gray-900">Analyze:</span> Run the audit to see statistical breakdowns and AI-generated summaries.</li>
+                  <li><span className="font-bold text-gray-900">Mitigate:</span> Follow the Gemini-powered recommendations to improve your model's fairness.</li>
+                </ol>
+              </section>
+
+              <div className="pt-8 border-t border-gray-100 flex justify-center">
+                <button 
+                  onClick={() => setShowDocs(false)}
+                  className="bg-indigo-600 text-white px-8 py-3 rounded-xl font-bold hover:bg-indigo-700 transition-all shadow-lg"
+                >
+                  Back to Dashboard
+                </button>
+              </div>
+            </div>
+          </div>
+        ) : !data.length ? (
           <div className="max-w-2xl mx-auto mt-12">
             <div className="text-center mb-10">
               <h2 className="text-4xl font-extrabold mb-4 tracking-tight">Audit your AI for Bias.</h2>
