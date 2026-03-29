@@ -1,0 +1,5 @@
+{
+  "name": "FairAudit AI",
+  "description": "A comprehensive bias detection and audit tool for machine learning datasets and models, powered by Gemini for actionable insights.",
+  "requestFramePermissions": []
+}
